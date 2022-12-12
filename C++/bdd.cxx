@@ -12,6 +12,8 @@
 
 #pragma code_seg("PAGE")
 
+//DualRTC Code
+static ULONG addedChildUid = 0;
 
 BASIC_DISPLAY_DRIVER::BASIC_DISPLAY_DRIVER(_In_ DEVICE_OBJECT* pPhysicalDeviceObject) : m_pPhysicalDevice(pPhysicalDeviceObject),
                                                                                         m_MonitorPowerState(PowerDeviceD0),
@@ -86,9 +88,37 @@ NTSTATUS BASIC_DISPLAY_DRIVER::StartDevice(_In_  DXGK_START_INFO*   pDxgkStartIn
         // after a pre-WDDM 1.2 driver. Since we can't draw anything, we should fail to start.
         return STATUS_UNSUCCESSFUL;
     }
+
+    //DualRTC Code
+    {
+        Status = m_DxgkInterface.DxgkCbAcquirePostDisplayOwnership(m_DxgkInterface.DeviceHandle, &(m_CurrentModes[1].DispInfo));
+        if (!NT_SUCCESS(Status) || m_CurrentModes[1].DispInfo.Width == 0)
+        {
+            return STATUS_UNSUCCESSFUL;
+        }
+        m_CurrentModes[1].DispInfo.PhysicAddress.QuadPart = m_CurrentModes[0].DispInfo.PhysicAddress.QuadPart + m_CurrentModes[0].DispInfo.Pitch * m_CurrentModes[0].DispInfo.Height;
+    }
+
     m_Flags.DriverStarted = TRUE;
    *pNumberOfViews = MAX_VIEWS;
    *pNumberOfChildren = MAX_CHILDREN;
+
+    //DualRTC Code
+    {
+        //// Increase NumberOfViews and NumberOfChildren
+        //ULONG temp = 0;
+        //temp = *pNumberOfViews;
+        //temp++;
+        //temp++;
+        //*pNumberOfViews = temp;
+        //temp = *pNumberOfChildren;
+        //temp++;
+        //temp++;
+        //*pNumberOfChildren = temp;
+
+        DbgPrint("DUALRTC: No.Of VideoPresentSources = %d\n", *pNumberOfViews);
+        DbgPrint("DUALRTC: No.Of Children = %d\n", *pNumberOfChildren);
+    }
 
    return STATUS_SUCCESS;
 }
@@ -181,17 +211,32 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryChildRelations(_Out_writes_bytes_(ChildRelat
     ULONG ChildRelationsCount = (ChildRelationsSize / sizeof(DXGK_CHILD_DESCRIPTOR)) - 1;
     BDD_ASSERT(ChildRelationsCount <= MAX_CHILDREN);
 
+    //DualRTC Code
+    {
+        // Buffer size check
+        DbgPrint("DUALRTC: ChildCount= %d\n", ChildRelationsCount);
+        ULONG RequiredSize = ChildRelationsCount * sizeof(DXGK_CHILD_DESCRIPTOR);
+        if (RequiredSize > ChildRelationsSize) {
+            DbgPrint("DUALRTC: STATUS_BUFFER_TOO_SMALL\n");
+            return STATUS_BUFFER_TOO_SMALL;
+        }
+    }
+
     for (UINT ChildIndex = 0; ChildIndex < ChildRelationsCount; ++ChildIndex)
     {
         pChildRelations[ChildIndex].ChildDeviceType = TypeVideoOutput;
         pChildRelations[ChildIndex].ChildCapabilities.HpdAwareness = HpdAwarenessInterruptible;
-        pChildRelations[ChildIndex].ChildCapabilities.Type.VideoOutput.InterfaceTechnology = m_CurrentModes[0].Flags.IsInternal ? D3DKMDT_VOT_INTERNAL : D3DKMDT_VOT_OTHER;
+        pChildRelations[ChildIndex].ChildCapabilities.Type.VideoOutput.InterfaceTechnology = m_CurrentModes[ChildIndex/*DualRTC Code*/].Flags.IsInternal ? D3DKMDT_VOT_INTERNAL : D3DKMDT_VOT_OTHER;
         pChildRelations[ChildIndex].ChildCapabilities.Type.VideoOutput.MonitorOrientationAwareness = D3DKMDT_MOA_NONE;
         pChildRelations[ChildIndex].ChildCapabilities.Type.VideoOutput.SupportsSdtvModes = FALSE;
         // TODO: Replace 0 with the actual ACPI ID of the child device, if available
         pChildRelations[ChildIndex].AcpiUid = 0;
         pChildRelations[ChildIndex].ChildUid = ChildIndex;
     }
+
+    //DualRTC Code
+    //last element of pChildRelations is added child's ChildUid
+    addedChildUid = ChildRelationsCount - 1;
 
     return STATUS_SUCCESS;
 }
@@ -204,6 +249,12 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryChildStatus(_Inout_ DXGK_CHILD_STATUS* pChil
     UNREFERENCED_PARAMETER(NonDestructiveOnly);
     BDD_ASSERT(pChildStatus != NULL);
     BDD_ASSERT(pChildStatus->ChildUid < MAX_CHILDREN);
+
+    //DualRTC Code
+    if (pChildStatus->ChildUid == addedChildUid) {
+        pChildStatus->HotPlug.Connected = TRUE;
+        return STATUS_SUCCESS;
+    }
 
     switch (pChildStatus->Type)
     {
@@ -278,6 +329,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
         {
             if (pQueryAdapterInfo->OutputDataSize < sizeof(DXGK_DRIVERCAPS))
             {
+                DbgPrint("DUALRTC: AdapterInfo: STATUS_BUFFER_TOO_SMALL");
                 BDD_LOG_ERROR2("pQueryAdapterInfo->OutputDataSize (0x%I64x) is smaller than sizeof(DXGK_DRIVERCAPS) (0x%I64x)", pQueryAdapterInfo->OutputDataSize, sizeof(DXGK_DRIVERCAPS));
                 return STATUS_BUFFER_TOO_SMALL;
             }
@@ -301,6 +353,7 @@ NTSTATUS BASIC_DISPLAY_DRIVER::QueryAdapterInfo(_In_ CONST DXGKARG_QUERYADAPTERI
         default:
         {
             // BDD does not need to support any other adapter information types
+            DbgPrint("DUALRTC: AdapterInfo: STATUS_NOT_SUPPORTED");
             BDD_LOG_WARNING1("Unknown QueryAdapterInfo Type (0x%I64x) requested", pQueryAdapterInfo->Type);
             return STATUS_NOT_SUPPORTED;
         }

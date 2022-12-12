@@ -321,16 +321,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\BDD.cxx" />
-    <ClCompile Include="..\BDD_DDI.cxx" />
-    <ClCompile Include="..\BDD_DMM.cxx" />
-    <ClCompile Include="..\BDD_Util.cxx" />
-    <ClCompile Include="..\BltFuncs.cxx" />
-    <ClCompile Include="..\BltHw.cxx" />
-    <ClCompile Include="..\memory.cxx" />
+    <ClCompile Include="..\BDD_DDI.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\BDD_DMM.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\BDD_Util.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\BltFuncs.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\BltHw.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="..\memory.cxx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Win8 Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ResourceCompile Include="..\sampledisplay.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Inf Exclude="@(Inf)" Include="*.inf" />
+    <Inf Exclude="@(Inf)" Include="SampleDisplay.inf" />
     <FilesToPackage Include="$(TargetPath)" Condition="'$(ConfigurationType)'=='Driver' or '$(ConfigurationType)'=='DynamicLibrary'" />
   </ItemGroup>
   <ItemGroup>

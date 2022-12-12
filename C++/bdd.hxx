@@ -78,8 +78,8 @@ typedef struct _BLT_INFO
     UINT Height; // For the unrotated image
 } BLT_INFO;
 
-#define MAX_CHILDREN                   1
-#define MAX_VIEWS                      1
+#define MAX_CHILDREN                   2
+#define MAX_VIEWS                      2
 
 typedef struct _BDD_FLAGS
 {

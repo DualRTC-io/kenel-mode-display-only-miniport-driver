@@ -836,7 +836,7 @@ struct SampleSourceMode
 };
 
 // The driver will advertise all modes that fit within the actual required mode (see AddSingleSourceMode below)
-const static SampleSourceMode C_SampleSourceMode[] = {{800,600},{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1200}};
+const static SampleSourceMode C_SampleSourceMode[] = {{800,600},{1000,700}/*DualRTCCode*/,{1024,768},{1152,864},{1280,800},{1280,1024},{1400,1050},{1600,1200},{1680,1050},{1920,1200}};
 const static UINT C_SampleSourceModeMax = sizeof(C_SampleSourceMode)/sizeof(C_SampleSourceMode[0]);
 
 NTSTATUS BASIC_DISPLAY_DRIVER::AddSingleSourceMode(_In_ CONST DXGK_VIDPNSOURCEMODESET_INTERFACE* pVidPnSourceModeSetInterface,

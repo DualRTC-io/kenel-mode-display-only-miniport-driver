@@ -84,6 +84,7 @@ VOID
 BddDdiUnload(VOID)
 {
     PAGED_CODE();
+    DbgPrint("TEST: Unload\n");
 }
 
 NTSTATUS
@@ -92,6 +93,7 @@ BddDdiAddDevice(
     _Outptr_ PVOID*  ppDeviceContext)
 {
     PAGED_CODE();
+    DbgPrint("TEST: AddDevice\n");
 
     if ((pPhysicalDeviceObject == NULL) ||
         (ppDeviceContext == NULL))
@@ -119,6 +121,7 @@ BddDdiRemoveDevice(
     _In_  VOID* pDeviceContext)
 {
     PAGED_CODE();
+    DbgPrint("TEST: RemoveDevice\n");
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
 
@@ -140,6 +143,7 @@ BddDdiStartDevice(
     _Out_ ULONG*             pNumberOfChildren)
 {
     PAGED_CODE();
+    DbgPrint("TEST: StartDevice\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -151,6 +155,7 @@ BddDdiStopDevice(
     _In_  VOID* pDeviceContext)
 {
     PAGED_CODE();
+    DbgPrint("TEST: StopDevice\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -165,6 +170,7 @@ BddDdiDispatchIoRequest(
     _In_  VIDEO_REQUEST_PACKET* pVideoRequestPacket)
 {
     PAGED_CODE();
+    DbgPrint("TEST: DispatchIoRequest\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -184,6 +190,7 @@ BddDdiSetPowerState(
     _In_  POWER_ACTION       ActionType)
 {
     PAGED_CODE();
+    DbgPrint("TEST: SetPowerState\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -205,6 +212,7 @@ BddDdiQueryChildRelations(
     _In_                             ULONG                  ChildRelationsSize)
 {
     PAGED_CODE();
+    DbgPrint("TEST: QueryChildRelations\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -218,6 +226,7 @@ BddDdiQueryChildStatus(
     _In_    BOOLEAN            NonDestructiveOnly)
 {
     PAGED_CODE();
+    DbgPrint("TEST: QueryChildStatus\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -231,6 +240,7 @@ BddDdiQueryDeviceDescriptor(
     _Inout_ DXGK_DEVICE_DESCRIPTOR* pDeviceDescriptor)
 {
     PAGED_CODE();
+    DbgPrint("TEST: QueryDeviceDescriptor\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -258,6 +268,7 @@ BddDdiQueryAdapterInfo(
     _In_ CONST DXGKARG_QUERYADAPTERINFO* pQueryAdapterInfo)
 {
     PAGED_CODE();
+    DbgPrint("TEST: QueryAdapterInfo\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -271,6 +282,7 @@ BddDdiSetPointerPosition(
     _In_ CONST DXGKARG_SETPOINTERPOSITION* pSetPointerPosition)
 {
     PAGED_CODE();
+    DbgPrint("TEST: SetPointerPosition\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -289,6 +301,7 @@ BddDdiSetPointerShape(
     _In_ CONST DXGKARG_SETPOINTERSHAPE* pSetPointerShape)
 {
     PAGED_CODE();
+    DbgPrint("TEST: SetPointerShape\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -308,6 +321,7 @@ BddDdiPresentDisplayOnly(
     _In_ CONST DXGKARG_PRESENT_DISPLAYONLY* pPresentDisplayOnly)
 {
     PAGED_CODE();
+    //DbgPrint("TEST: PresentDisplayOnly\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -327,6 +341,7 @@ BddDdiStopDeviceAndReleasePostDisplayOwnership(
     _Out_ DXGK_DISPLAY_INFORMATION*      DisplayInfo)
 {
     PAGED_CODE();
+    DbgPrint("TEST: StopDeviceAndReleasePostDisplayOwnerShip\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -340,6 +355,7 @@ BddDdiIsSupportedVidPn(
     _Inout_ DXGKARG_ISSUPPORTEDVIDPN* pIsSupportedVidPn)
 {
     PAGED_CODE();
+    DbgPrint("TEST: IsSupportedVidPn 0x%x\n", pIsSupportedVidPn->hDesiredVidPn);
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -361,6 +377,7 @@ BddDdiRecommendFunctionalVidPn(
     _In_ CONST DXGKARG_RECOMMENDFUNCTIONALVIDPN* CONST pRecommendFunctionalVidPn)
 {
     PAGED_CODE();
+    DbgPrint("TEST: RecommendFunctionalVidPn\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -379,6 +396,7 @@ BddDdiRecommendVidPnTopology(
     _In_ CONST DXGKARG_RECOMMENDVIDPNTOPOLOGY* CONST  pRecommendVidPnTopology)
 {
     PAGED_CODE();
+    DbgPrint("TEST: RecommendVidPnTopology\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -397,6 +415,7 @@ BddDdiRecommendMonitorModes(
     _In_ CONST DXGKARG_RECOMMENDMONITORMODES* CONST  pRecommendMonitorModes)
 {
     PAGED_CODE();
+    DbgPrint("TEST: RecmooendMonitorModes\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -415,6 +434,7 @@ BddDdiEnumVidPnCofuncModality(
     _In_ CONST DXGKARG_ENUMVIDPNCOFUNCMODALITY* CONST pEnumCofuncModality)
 {
     PAGED_CODE();
+    DbgPrint("TEST: EnumVidPnCofuncModality 0x%x\n", pEnumCofuncModality->hConstrainingVidPn);
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -433,6 +453,7 @@ BddDdiSetVidPnSourceVisibility(
     _In_ CONST DXGKARG_SETVIDPNSOURCEVISIBILITY* pSetVidPnSourceVisibility)
 {
     PAGED_CODE();
+    DbgPrint("TEST: SetVidPnSourceVisibility\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -451,6 +472,7 @@ BddDdiCommitVidPn(
     _In_ CONST DXGKARG_COMMITVIDPN* CONST pCommitVidPn)
 {
     PAGED_CODE();
+    DbgPrint("TEST: CommitVidPn\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -469,6 +491,7 @@ BddDdiUpdateActiveVidPnPresentPath(
     _In_ CONST DXGKARG_UPDATEACTIVEVIDPNPRESENTPATH* CONST pUpdateActiveVidPnPresentPath)
 {
     PAGED_CODE();
+    DbgPrint("TEST: UpdateActiveVidPnPresentPath\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -487,6 +510,7 @@ BddDdiQueryVidPnHWCapability(
     _Inout_ DXGKARG_QUERYVIDPNHWCAPABILITY* pVidPnHWCaps)
 {
     PAGED_CODE();
+    DbgPrint("TEST: QueryVidPnHWCapability\n");
     BDD_ASSERT_CHK(hAdapter != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(hAdapter);
@@ -508,6 +532,7 @@ VOID
 BddDdiDpcRoutine(
     _In_  VOID* pDeviceContext)
 {
+    //DbgPrint("TEST: DpcRoutine\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -524,6 +549,7 @@ BddDdiInterruptRoutine(
     _In_  VOID* pDeviceContext,
     _In_  ULONG MessageNumber)
 {
+    DbgPrint("TEST: InterruptRoutine\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -534,6 +560,7 @@ VOID
 BddDdiResetDevice(
     _In_  VOID* pDeviceContext)
 {
+    DbgPrint("TEST: ResetDevice\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -550,6 +577,7 @@ BddDdiSystemDisplayEnable(
     _Out_ UINT* Height,
     _Out_ D3DDDIFORMAT* ColorFormat)
 {
+    DbgPrint("TEST: SystemDisplayEnable\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
@@ -567,6 +595,7 @@ BddDdiSystemDisplayWrite(
     _In_  UINT  PositionX,
     _In_  UINT  PositionY)
 {
+    DbgPrint("TEST: SystemDisplayWrite\n");
     BDD_ASSERT_CHK(pDeviceContext != NULL);
 
     BASIC_DISPLAY_DRIVER* pBDD = reinterpret_cast<BASIC_DISPLAY_DRIVER*>(pDeviceContext);
